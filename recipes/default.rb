@@ -226,3 +226,19 @@ execute 'update hadoop-conf alternatives' do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
   not_if "update-alternatives --display hadoop-conf | grep best | awk '{print $5}' | grep /etc/hadoop/#{node['hadoop']['conf_dir']}"
 end
+
+# Export hadoop environment variables
+my_vars = {
+  :options => {
+    'HADOOP_CONF_DIR' => "/etc/hadoop/#{node['hadoop']['conf_dir']}",
+    'YARN_CONF_DIR' => '$HADOOP_CONF_DIR'
+  }
+}
+
+template "/etc/profile.d/hadoop.sh" do
+  source 'generic-env.sh.erb'
+  mode 0755
+  owner 'root'
+  group 'root'
+  variables my_vars
+end

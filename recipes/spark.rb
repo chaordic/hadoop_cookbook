@@ -155,8 +155,8 @@ end
   template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
-    owner 'spark'
-    group 'spark'
+    owner 'root'
+    group 'root'
     action :create
     variables my_vars
   end
